@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"go_interpreter/lexer"
 	"testing"
 )
@@ -22,16 +21,12 @@ def var=996;
 	// 	t.Fatalf("程序不包含3个声明, 现在有: %d\n", len(program.Statements))
 	// }
 
-	tests := []struct {
-		expectedIdentifier string
-	}{
-		{"x"},
-		{"y"},
-		{"var"},
-	}
-
-	for i, test := range tests {
-		fmt.Printf("测试 %d: %s\n", i+1, test.expectedIdentifier)
-	}
+	// tests := []struct {
+	// 	expectedIdentifier string
+	// }{
+	// 	{"x"},
+	// 	{"y"},
+	// 	{"var"},
+	// }
 
 }

@@ -8,9 +8,8 @@ import (
 
 func TestAST(t *testing.T) {
 	ast := &DefStatement{
-		identifier: token.Token{Type: token.IDENTIFIER, LiteralValue: "x"},
-		expression: nil, // 这里可以填入具体的表达式实现
+		Identifier: token.Token{Type: token.IDENTIFIER, LiteralValue: "x"},
+		Expression: nil, // 这里可以填入具体的表达式实现
 	}
-	var f TreeNode = ast
-	fmt.Println(f)
+	fmt.Println(ast)
 }

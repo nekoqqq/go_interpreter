@@ -18,12 +18,12 @@ type Expression interface {
 }
 
 type DefStatement struct {
-	identifier token.Token
-	expression Expression
+	Identifier token.Token
+	Expression Expression
 }
 
 func (ds *DefStatement) String() string {
-	return ds.identifier.LiteralValue
+	return ds.Identifier.LiteralValue
 }
 
 func (ds *DefStatement) Do() {

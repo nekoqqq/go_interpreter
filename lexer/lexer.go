@@ -25,14 +25,16 @@ func (l *Lexer) readChar() byte {
 	return l.char
 }
 
+// 查看当前的字符但是不读取
 func (l *Lexer) peekChar() byte {
 	if l.position >= len(l.input) {
 		return 0
 	}
 	return l.input[l.position]
-} // 向前多看一个字符
+}
 
 // NextToken TODO UTF-8字符支持，现在没法跳过
+// 读取当前的token并跳过
 func (l *Lexer) NextToken() token.Token {
 	var t *token.Token
 	l.skipBlank()
