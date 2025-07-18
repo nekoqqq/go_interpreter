@@ -32,6 +32,12 @@ func (l *Lexer) rollbackChar() { // 回退一个字符
 	}
 	l.position--
 }
+func (l *Lexer) peekChar() byte {
+	if l.position >= len(l.input) {
+		return 0
+	}
+	return l.input[l.position]
+} // 向前多看一个字符
 
 func (l *Lexer) NextToken() token.Token {
 	var t *token.Token
@@ -46,9 +52,19 @@ func (l *Lexer) NextToken() token.Token {
 	case '/':
 		t = token.NewToken(constant.DIV, char)
 	case '=':
-		t = token.NewToken(constant.ASSIGN, char)
+		if l.peekChar() == '=' {
+			l.readChar()
+			t = token.NewToken(constant.EQ, "==")
+		} else {
+			t = token.NewToken(constant.ASSIGN, char)
+		}
 	case '!':
-		t = token.NewToken(constant.FAC, char)
+		if l.peekChar() == '=' {
+			l.readChar()
+			t = token.NewToken(constant.NEQ, "!=")
+		} else {
+			t = token.NewToken(constant.FAC, char)
+		}
 	case '<':
 		t = token.NewToken(constant.LT, char)
 	case '>':

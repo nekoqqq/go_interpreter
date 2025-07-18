@@ -54,6 +54,7 @@ func TestSourceCode(t *testing.T) {
 	return false;
 	}
 	else return true;
+	5 == 10 5 != 10
 	`
 	tests := []struct {
 		expectedType    token.TokenType
@@ -205,7 +206,22 @@ func TestSourceCode(t *testing.T) {
 		{constant.SEMICOLON, ";"},
 		{constant.BLANK, "\n"},
 
-		// 第十六行: '\t'
+		// 第十六行: 10 == 10 5 != 10
+		{constant.BLANK, "\t"},
+		{constant.LITERAL, "5"},
+		{constant.BLANK, " "},
+		{constant.EQ, "=="},
+		{constant.BLANK, " "},
+		{constant.LITERAL, "10"},
+		{constant.BLANK, " "},
+		{constant.LITERAL, "5"},
+		{constant.BLANK, " "},
+		{constant.NEQ, "!="},
+		{constant.BLANK, " "},
+		{constant.LITERAL, "10"},
+		{constant.BLANK, "\n"},
+
+		// 第十七行: '\t'
 		{constant.BLANK, "\t"},
 
 		// 文件结束

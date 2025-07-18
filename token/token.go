@@ -22,7 +22,7 @@ var keywords = map[string]TokenType{
 	"false":  constant.FALSE,
 	"if":     constant.IF,
 	"elif":   constant.ELIF,
-	"else":   constant.ELIF,
+	"else":   constant.ELSE,
 	"return": constant.RETURN,
 }
 

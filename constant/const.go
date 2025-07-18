@@ -20,7 +20,8 @@ const (
 	FAC    // 阶乘!
 	LT     // <
 	GT     // >
-
+	EQ     // ==
+	NEQ    // !=
 	// 分割符号
 	COMMA     // ,
 	SEMICOLON // ;
