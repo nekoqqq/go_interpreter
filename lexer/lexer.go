@@ -25,12 +25,6 @@ func (l *Lexer) readChar() byte {
 	return l.char
 }
 
-func (l *Lexer) rollbackChar() { // 回退一个字符
-	if l.position <= 0 {
-		return
-	}
-	l.position--
-}
 func (l *Lexer) peekChar() byte {
 	if l.position >= len(l.input) {
 		return 0
@@ -38,8 +32,10 @@ func (l *Lexer) peekChar() byte {
 	return l.input[l.position]
 } // 向前多看一个字符
 
+// NextToken TODO UTF-8字符支持，现在没法跳过
 func (l *Lexer) NextToken() token.Token {
 	var t *token.Token
+	l.skipBlank()
 	char := string(l.readChar())
 	switch l.char {
 	case '+':
@@ -90,6 +86,13 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 	return *t
+}
+func (l *Lexer) skipBlank() {
+	char := l.peekChar()
+	for char == '\n' || char == '\t' || char == '\r' || char == ' ' {
+		l.readChar()
+		char = l.peekChar()
+	}
 }
 
 func (l *Lexer) makeTwoCharToken(firstChar byte, secondTarget byte, singleType token.TokenType, doubleType token.TokenType) *token.Token {
