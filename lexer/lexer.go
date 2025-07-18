@@ -69,9 +69,9 @@ func (l *Lexer) NextToken() token.Token {
 		t = token.NewToken(constant.BLANK, char)
 	default:
 		if isLetter(l.char) { // 读取标识符
-			t = token.NewToken(constant.IDENTIFIER, l.readIdentifier())
+			t = token.NewToken(constant.IDENTIFIER, l.readWithStrategy(isLetter))
 		} else if isNumber(l.char) {
-			t = token.NewToken(constant.LITERAL, l.readNumber())
+			t = token.NewToken(constant.LITERAL, l.readWithStrategy(isNumber))
 		} else {
 			t = token.NewToken(constant.ILLEGAL, char)
 		}
@@ -86,20 +86,16 @@ func isNumber(char byte) bool {
 	return '0' <= char && char <= '9'
 }
 
-// TODO 优化下面的代码，有重复部分
-func (l *Lexer) readIdentifier() string {
-	l.rollbackChar()
-	beg := l.position
-	for isLetter(l.readChar()) {
-	}
-	l.rollbackChar()
-	return l.input[beg:l.position]
-}
+type readStrategy func(byte) bool
 
-func (l *Lexer) readNumber() string {
+func (l *Lexer) readWithStrategy(strategy readStrategy) string {
 	l.rollbackChar()
 	beg := l.position
-	for isNumber(l.readChar()) {
+	for {
+		char := l.readChar()
+		if char == 0 || !strategy(char) {
+			break
+		}
 	}
 	l.rollbackChar()
 	return l.input[beg:l.position]
