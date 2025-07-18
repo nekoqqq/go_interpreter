@@ -47,6 +47,12 @@ func (l *Lexer) NextToken() token.Token {
 		t = token.NewToken(constant.DIV, char)
 	case '=':
 		t = token.NewToken(constant.ASSIGN, char)
+	case '!':
+		t = token.NewToken(constant.FAC, char)
+	case '<':
+		t = token.NewToken(constant.LT, char)
+	case '>':
+		t = token.NewToken(constant.GT, char)
 	case ',':
 		t = token.NewToken(constant.COMMA, char)
 	case ';':

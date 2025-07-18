@@ -14,6 +14,9 @@ const (
 	TIMES  // *
 	DIV    // /
 	ASSIGN // =
+	FAC    // 阶乘!
+	LT     // <
+	GT     // >
 
 	// 分割符号
 	COMMA     // ,

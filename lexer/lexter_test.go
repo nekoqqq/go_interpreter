@@ -45,6 +45,8 @@ func TestSourceCode(t *testing.T) {
 		x+y;
 	}
 	def result = add(five,ten)
+	!/*5;
+	5< 10> 5;
 	`
 	tests := []struct {
 		expectedType    int
@@ -119,6 +121,29 @@ func TestSourceCode(t *testing.T) {
 		{constant.IDENTIFIER, "ten"},
 		{constant.RPAREN, ")"},
 		{constant.BLANK, "\n"},
+
+		// 第八行: !/*t;
+		{constant.BLANK, "\t"},
+		{constant.FAC, "!"},
+		{constant.DIV, "/"},
+		{constant.TIMES, "*"},
+		{constant.LITERAL, "5"},
+		{constant.SEMICOLON, ";"},
+		{constant.BLANK, "\n"},
+
+		// 第九行: 5< 10 > 5;
+		{constant.BLANK, "\t"},
+		{constant.LITERAL, "5"},
+		{constant.LT, "<"},
+		{constant.BLANK, " "},
+		{constant.LITERAL, "10"},
+		{constant.GT, ">"},
+		{constant.BLANK, " "},
+		{constant.LITERAL, "5"},
+		{constant.SEMICOLON, ";"},
+		{constant.BLANK, "\n"},
+
+		// 第十行: '\t'
 		{constant.BLANK, "\t"},
 
 		// 文件结束
@@ -128,7 +153,7 @@ func TestSourceCode(t *testing.T) {
 	for i, test := range tests {
 		tok := l.NextToken()
 		if tok.Type != test.expectedType {
-			t.Fatalf("test[%d] - token: %v, tokentype wrong. expected=%q, got=%q", i, tok, test.expectedType, tok.Type)
+			t.Fatalf("test: [%d] - token: %v, tokentype wrong. expected=%q, got=%q", i, tok, test.expectedType, tok.Type)
 		}
 		if tok.LiteralValue != test.expectedLiteral {
 			t.Fatalf("test[%d] - token: %v, literal wrong. expected=%q, got=%q", i, tok, test.expectedLiteral, tok.LiteralValue)
