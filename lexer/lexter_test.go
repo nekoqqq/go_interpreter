@@ -2,13 +2,14 @@ package lexer
 
 import (
 	"go_interpreter/constant"
+	"go_interpreter/token"
 	"testing"
 )
 
 func TestNextToken(t *testing.T) {
 	input := `+-*/=,;()[]{}`
 	tests := []struct {
-		expectedType    int
+		expectedType    token.TokenType
 		expectedLiteral string
 	}{
 		{constant.PLUS, "+"},
@@ -41,15 +42,21 @@ func TestSourceCode(t *testing.T) {
 	input := `
 	def five=5;
 	def ten=10;
-	def add = function(x,y){
+	def add = func(x,y){
 		x+y;
 	}
 	def result = add(five,ten)
 	!/*5;
 	5< 10> 5;
+	if(5<10){
+	return true;
+	}elif (10>20){
+	return false;
+	}
+	else return true;
 	`
 	tests := []struct {
-		expectedType    int
+		expectedType    token.TokenType
 		expectedLiteral string
 	}{
 		// 第一行: 空行（只有换行符）
@@ -57,7 +64,7 @@ func TestSourceCode(t *testing.T) {
 
 		// 第二行: def five=5
 		{constant.BLANK, "\t"},
-		{constant.IDENTIFIER, "def"},
+		{constant.KEYWORD, "def"},
 		{constant.BLANK, " "},
 		{constant.IDENTIFIER, "five"},
 		{constant.ASSIGN, "="},
@@ -67,7 +74,7 @@ func TestSourceCode(t *testing.T) {
 
 		// 第三行: def ten=10
 		{constant.BLANK, "\t"},
-		{constant.IDENTIFIER, "def"},
+		{constant.KEYWORD, "def"},
 		{constant.BLANK, " "},
 		{constant.IDENTIFIER, "ten"},
 		{constant.ASSIGN, "="},
@@ -77,13 +84,13 @@ func TestSourceCode(t *testing.T) {
 
 		// 第四行: def add  = function(x,y){
 		{constant.BLANK, "\t"},
-		{constant.IDENTIFIER, "def"},
+		{constant.KEYWORD, "def"},
 		{constant.BLANK, " "},
 		{constant.IDENTIFIER, "add"},
 		{constant.BLANK, " "},
 		{constant.ASSIGN, "="},
 		{constant.BLANK, " "},
-		{constant.IDENTIFIER, "function"},
+		{constant.KEYWORD, "func"},
 		{constant.LPAREN, "("},
 		{constant.IDENTIFIER, "x"},
 		{constant.COMMA, ","},
@@ -108,7 +115,7 @@ func TestSourceCode(t *testing.T) {
 
 		// 第七行: def result = add(five,ten)
 		{constant.BLANK, "\t"},
-		{constant.IDENTIFIER, "def"},
+		{constant.KEYWORD, "def"},
 		{constant.BLANK, " "},
 		{constant.IDENTIFIER, "result"},
 		{constant.BLANK, " "},
@@ -143,7 +150,62 @@ func TestSourceCode(t *testing.T) {
 		{constant.SEMICOLON, ";"},
 		{constant.BLANK, "\n"},
 
-		// 第十行: '\t'
+		// 第十行: if(5<10){
+		{constant.BLANK, "\t"},
+		{constant.KEYWORD, "if"},
+		{constant.LPAREN, "("},
+		{constant.LITERAL, "5"},
+		{constant.LT, "<"},
+		{constant.LITERAL, "10"},
+		{constant.RPAREN, ")"},
+		{constant.LOPEN, "{"},
+		{constant.BLANK, "\n"},
+
+		// 第十一行: return true;
+		{constant.BLANK, "\t"}, // 缩进制表符
+		{constant.KEYWORD, "return"},
+		{constant.BLANK, " "},
+		{constant.KEYWORD, "true"},
+		{constant.SEMICOLON, ";"},
+		{constant.BLANK, "\n"},
+
+		// 第十二行: }elif (10>20){
+		{constant.BLANK, "\t"},
+		{constant.ROPEN, "}"},
+		{constant.KEYWORD, "elif"},
+		{constant.BLANK, " "},
+		{constant.LPAREN, "("},
+		{constant.LITERAL, "10"},
+		{constant.GT, ">"},
+		{constant.LITERAL, "20"},
+		{constant.RPAREN, ")"},
+		{constant.LOPEN, "{"},
+		{constant.BLANK, "\n"},
+
+		// 第十三行: return false;
+		{constant.BLANK, "\t"}, // 缩进制表符
+		{constant.KEYWORD, "return"},
+		{constant.BLANK, " "},
+		{constant.KEYWORD, "false"},
+		{constant.SEMICOLON, ";"},
+		{constant.BLANK, "\n"},
+
+		// 第十四行: }
+		{constant.BLANK, "\t"},
+		{constant.ROPEN, "}"},
+		{constant.BLANK, "\n"},
+
+		// 第十五行: else return true;
+		{constant.BLANK, "\t"},
+		{constant.KEYWORD, "else"},
+		{constant.BLANK, " "},
+		{constant.KEYWORD, "return"},
+		{constant.BLANK, " "},
+		{constant.KEYWORD, "true"},
+		{constant.SEMICOLON, ";"},
+		{constant.BLANK, "\n"},
+
+		// 第十六行: '\t'
 		{constant.BLANK, "\t"},
 
 		// 文件结束

@@ -75,7 +75,9 @@ func (l *Lexer) NextToken() token.Token {
 		t = token.NewToken(constant.BLANK, char)
 	default:
 		if isLetter(l.char) { // 读取标识符
-			t = token.NewToken(constant.IDENTIFIER, l.readWithStrategy(isLetter))
+			identifier := l.readWithStrategy(isLetter)
+			tokenType := token.LookupIdentifier(identifier)
+			t = token.NewToken(tokenType, identifier)
 		} else if isNumber(l.char) {
 			t = token.NewToken(constant.LITERAL, l.readWithStrategy(isNumber))
 		} else {
