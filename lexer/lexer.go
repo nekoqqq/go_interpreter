@@ -1,14 +1,13 @@
 package lexer
 
 import (
-	"go_interpreter/constant"
 	"go_interpreter/token"
 )
 
 type Lexer struct {
 	input    string
 	position int  // 下一个要读取位置
-	char     byte // 当前读取的字符
+	char     byte // 当前位置的字符
 }
 
 func New(input string) *Lexer {
@@ -44,50 +43,50 @@ func (l *Lexer) NextToken() token.Token {
 	char := string(l.readChar())
 	switch l.char {
 	case '+':
-		t = token.NewToken(constant.PLUS, char)
+		t = token.NewToken(token.PLUS, char)
 	case '-':
-		t = token.NewToken(constant.MINUS, char)
+		t = token.NewToken(token.MINUS, char)
 	case '*':
-		t = token.NewToken(constant.TIMES, char)
+		t = token.NewToken(token.TIMES, char)
 	case '/':
-		t = token.NewToken(constant.DIV, char)
+		t = token.NewToken(token.DIV, char)
 	case '=':
-		t = l.makeTwoCharToken(l.char, '=', constant.ASSIGN, constant.EQ)
+		t = l.makeTwoCharToken(l.char, '=', token.ASSIGN, token.EQ)
 	case '!':
-		t = l.makeTwoCharToken(l.char, '=', constant.FACT, constant.NEQ)
+		t = l.makeTwoCharToken(l.char, '=', token.FACT, token.NEQ)
 	case '<':
-		t = token.NewToken(constant.LT, char)
+		t = token.NewToken(token.LT, char)
 	case '>':
-		t = token.NewToken(constant.GT, char)
+		t = token.NewToken(token.GT, char)
 	case ',':
-		t = token.NewToken(constant.COMMA, char)
+		t = token.NewToken(token.COMMA, char)
 	case ';':
-		t = token.NewToken(constant.SEMICOLON, char)
+		t = token.NewToken(token.SEMICOLON, char)
 	case '(':
-		t = token.NewToken(constant.LPAREN, char)
+		t = token.NewToken(token.LPAREN, char)
 	case ')':
-		t = token.NewToken(constant.RPAREN, char)
+		t = token.NewToken(token.RPAREN, char)
 	case '[':
-		t = token.NewToken(constant.LBRACKET, char)
+		t = token.NewToken(token.LBRACKET, char)
 	case ']':
-		t = token.NewToken(constant.RBRACKET, char)
+		t = token.NewToken(token.RBRACKET, char)
 	case '{':
-		t = token.NewToken(constant.LOPEN, char)
+		t = token.NewToken(token.LOPEN, char)
 	case '}':
-		t = token.NewToken(constant.ROPEN, char)
+		t = token.NewToken(token.ROPEN, char)
 	case 0: // NULL
-		t = token.NewToken(constant.EOF, "")
+		t = token.NewToken(token.EOF, "")
 	case ' ', '\t', '\n', '\r':
-		t = token.NewToken(constant.BLANK, char)
+		t = token.NewToken(token.BLANK, char)
 	default:
 		if isLetter(l.char) { // 读取标识符
 			identifier := l.readWithStrategy(isLetter)
 			tokenType := token.LookupIdentifier(identifier)
 			t = token.NewToken(tokenType, identifier)
 		} else if isNumber(l.char) {
-			t = token.NewToken(constant.LITERAL, l.readWithStrategy(isNumber))
+			t = token.NewToken(token.LITERAL, l.readWithStrategy(isNumber))
 		} else {
-			t = token.NewToken(constant.ILLEGAL, char)
+			t = token.NewToken(token.ILLEGAL, char)
 		}
 	}
 	return *t
@@ -105,16 +104,16 @@ func (l *Lexer) makeTwoCharToken(firstChar byte, secondTarget byte, singleType t
 }
 
 func (l *Lexer) readWithStrategy(strategy readStrategy) string {
-	l.rollbackChar()
+	begChar := l.char
 	beg := l.position
 	for {
-		char := l.readChar()
+		char := l.peekChar()
 		if char == 0 || !strategy(char) {
 			break
 		}
+		l.readChar()
 	}
-	l.rollbackChar()
-	return l.input[beg:l.position]
+	return string(begChar) + l.input[beg:l.position]
 }
 
 type readStrategy func(byte) bool

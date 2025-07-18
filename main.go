@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
+	"go_interpreter/repl"
+	"log"
+	"os"
+	"os/user"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
-
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	s := "gopher"
-	fmt.Printf("Hello and welcome, %s!\n", s)
-
-	for i := 1; i <= 5; i++ {
-		//TIP <p>To start your debugging session, right-click your code in the editor and select the Debug option.</p> <p>We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
-		fmt.Println("i =", 100/i)
+	u, err := user.Current()
+	if err != nil {
+		log.Fatalf("用户获取失败, err: %v", err)
 	}
+
+	fmt.Printf("尊敬的:%s, 欢迎使用本解释器!请输入任意命令\n", u.Username)
+	repl.Serve(os.Stdin, os.Stdout)
+
 }
