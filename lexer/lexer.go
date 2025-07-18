@@ -52,19 +52,9 @@ func (l *Lexer) NextToken() token.Token {
 	case '/':
 		t = token.NewToken(constant.DIV, char)
 	case '=':
-		if l.peekChar() == '=' {
-			l.readChar()
-			t = token.NewToken(constant.EQ, "==")
-		} else {
-			t = token.NewToken(constant.ASSIGN, char)
-		}
+		t = l.makeTwoCharToken(l.char, '=', constant.ASSIGN, constant.EQ)
 	case '!':
-		if l.peekChar() == '=' {
-			l.readChar()
-			t = token.NewToken(constant.NEQ, "!=")
-		} else {
-			t = token.NewToken(constant.FAC, char)
-		}
+		t = l.makeTwoCharToken(l.char, '=', constant.FACT, constant.NEQ)
 	case '<':
 		t = token.NewToken(constant.LT, char)
 	case '>':
@@ -103,14 +93,16 @@ func (l *Lexer) NextToken() token.Token {
 	return *t
 }
 
-func isLetter(char byte) bool {
-	return 'a' <= char && char <= 'z' || 'A' <= char && char <= 'Z' || char == '_'
+func (l *Lexer) makeTwoCharToken(firstChar byte, secondTarget byte, singleType token.TokenType, doubleType token.TokenType) *token.Token {
+	var t *token.Token
+	if l.peekChar() == secondTarget {
+		l.readChar()
+		t = token.NewToken(doubleType, string(firstChar)+string(secondTarget))
+	} else {
+		t = token.NewToken(singleType, string(firstChar))
+	}
+	return t
 }
-func isNumber(char byte) bool {
-	return '0' <= char && char <= '9'
-}
-
-type readStrategy func(byte) bool
 
 func (l *Lexer) readWithStrategy(strategy readStrategy) string {
 	l.rollbackChar()
@@ -123,4 +115,13 @@ func (l *Lexer) readWithStrategy(strategy readStrategy) string {
 	}
 	l.rollbackChar()
 	return l.input[beg:l.position]
+}
+
+type readStrategy func(byte) bool
+
+func isLetter(char byte) bool {
+	return 'a' <= char && char <= 'z' || 'A' <= char && char <= 'Z' || char == '_'
+}
+func isNumber(char byte) bool {
+	return '0' <= char && char <= '9'
 }

@@ -132,7 +132,7 @@ func TestSourceCode(t *testing.T) {
 
 		// 第八行: !/*t;
 		{constant.BLANK, "\t"},
-		{constant.FAC, "!"},
+		{constant.FACT, "!"},
 		{constant.DIV, "/"},
 		{constant.TIMES, "*"},
 		{constant.LITERAL, "5"},

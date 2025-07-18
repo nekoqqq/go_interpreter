@@ -7,9 +7,6 @@ const (
 
 	LITERAL    // 字面量, 5, 10
 	IDENTIFIER // 用户定义标识符, add, x, y
-	// TODO 如何实现一个嵌套的枚举，这里是KEYWORD需要嵌套
-	// 关键字
-	KEYWORD
 
 	// 运算符
 	PLUS   // +
@@ -17,7 +14,7 @@ const (
 	TIMES  // *
 	DIV    // /
 	ASSIGN // =
-	FAC    // 阶乘!
+	FACT   // 阶乘!
 	LT     // <
 	GT     // >
 	EQ     // ==
@@ -32,10 +29,13 @@ const (
 	RBRACKET // ]
 	LOPEN    // {
 	ROPEN    // }
+	// 关键字
+	// TODO 如何实现一个嵌套的枚举，这里是KEYWORD需要嵌套，当前一版是将keyword放在最后
+	KEYWORD
 )
 
 const (
-	FUNCTION = iota
+	FUNCTION = iota + KEYWORD + 1
 	DEF
 	TRUE
 	FALSE
