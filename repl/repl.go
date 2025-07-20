@@ -26,7 +26,7 @@ func Serve(in io.Reader, out io.Writer) {
 			continue
 		}
 		line := scanner.Text()
-		l := lexer.New(line)
+		l := lexer.NewLexer(line)
 		for t := l.NextToken(); t.Type != token.EOF; t = l.NextToken() {
 			_, err := fmt.Fprintf(out, "%+v\n", t)
 			if err != nil {

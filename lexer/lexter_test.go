@@ -26,7 +26,7 @@ func TestNextToken(t *testing.T) {
 		{token.ROPEN, "}"},
 		{token.EOF, ""},
 	}
-	l := New(input)
+	l := NewLexer(input)
 	for i, test := range tests {
 		tok := l.NextToken()
 		if tok.Type != test.expectedType {
@@ -226,7 +226,7 @@ func TestSourceCode(t *testing.T) {
 		// 文件结束
 		{token.EOF, ""},
 	}
-	l := New(input)
+	l := NewLexer(input)
 	for i, test := range tests {
 		tok := l.NextToken()
 		if tok.Type != test.expectedType {

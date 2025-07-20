@@ -10,7 +10,7 @@ type Lexer struct {
 	char     byte // 当前位置的字符
 }
 
-func New(input string) *Lexer {
+func NewLexer(input string) *Lexer {
 	l := &Lexer{input: input}
 	return l
 }

@@ -61,7 +61,7 @@ func NewToken(Type TokenType, LiteralValue string) *Token {
 
 var keywords = map[string]TokenType{
 	"func":   FUNCTION,
-	"def":    DEF,
+	"def":    DEF, // def <标识符> = <表达式>;
 	"true":   TRUE,
 	"false":  FALSE,
 	"if":     IF,
