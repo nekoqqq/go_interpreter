@@ -1,5 +1,5 @@
 # GO Interpreter GOQ
-> go语言实现解释器: 
+> go语言实现解释器
 ## 使用示例
 ```aiignore
 let x = 5
@@ -13,6 +13,9 @@ print(result)
 
 ## 组成
 - 词法分析器
+  - 分词器lexer
 - 语法分析器
-- 抽象语法树
-- 
+  - 抽象语法树ast
+# TODO
+- go语言怎么添加默认值
+- interface不需要用指针吗？

@@ -18,8 +18,13 @@ type Expression interface {
 }
 
 type DefStatement struct {
-	Identifier token.Token
-	Expression Expression
+	Identifier      *token.Token
+	IdentifierValue Expression
+}
+
+type RetStatement struct {
+	RetToken *token.Token // Ret的token
+	RetValue Expression   // Ret返回的表达式
 }
 
 func (ds *DefStatement) String() string {

@@ -35,7 +35,7 @@ func (l *Lexer) peekChar() byte {
 
 // NextToken TODO UTF-8字符支持，现在没法跳过
 // 读取当前的token并跳过
-func (l *Lexer) NextToken() token.Token {
+func (l *Lexer) NextToken() *token.Token {
 	var t *token.Token
 	l.skipBlank()
 	char := string(l.readChar())
@@ -87,7 +87,7 @@ func (l *Lexer) NextToken() token.Token {
 			t = token.NewToken(token.ILLEGAL, char)
 		}
 	}
-	return *t
+	return t
 }
 func (l *Lexer) skipBlank() {
 	char := l.peekChar()

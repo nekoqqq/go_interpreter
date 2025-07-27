@@ -8,8 +8,8 @@ import (
 
 func TestAST(t *testing.T) {
 	ast := &DefStatement{
-		Identifier: token.Token{Type: token.IDENTIFIER, LiteralValue: "x"},
-		Expression: nil, // 这里可以填入具体的表达式实现
+		Identifier:      &token.Token{Type: token.IDENTIFIER, LiteralValue: "x"},
+		IdentifierValue: nil, // 这里可以填入具体的表达式实现
 	}
 	fmt.Println(ast)
 }
